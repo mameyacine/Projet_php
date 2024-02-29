@@ -1,0 +1,130 @@
+/*public/style.css
+*/
+
+body {
+    background-color: #f8f8f8;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+nav{
+    background-color: #0d4992; /* Couleur de fond de la barre de navigation */
+    color: white; /* Couleur du texte de la barre de navigation */
+    padding: 4px 0; /* Espacement intérieur de la barre de navigation */
+    margin-bottom: 8px; /* Marge inférieure pour espacement avec le contenu suivant */
+}
+
+.container, .edit {
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.button,
+a.button, .plus, .submit, .widget, .label, span {
+    background-color: #125fac;
+    color: #fff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.button:hover,
+a.button:hover, .plus:hover, .submit:hover, .button:hover, span:hover {
+    background-color: #0056b3;
+}
+
+.button, .plus , .logout, .delete{
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.subtitle {
+    font-size: 1.6rem;
+    margin-bottom: 40px;
+}
+
+.title {
+    font-size: 2.4rem;
+    margin-bottom: 0px;
+}
+
+h1 {
+    color: #0d4992;
+    font-size: 2.4rem;
+    font-size: 2rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table th {
+    background-color:#295686 ;
+    padding: 20px;
+}
+
+.table tr:nth-child(even) {
+    background-color: #77889da6 ;
+}
+
+.table tr:hover {
+    background-color: #fff;
+}
+
+
+
+a:hover {
+    text-decoration: underline;
+}
+
+nav {
+    background-color: #112a44;
+}
+
+ul {
+    display: flex;
+}
+
+
+
+.logout{
+    color: #fff;
+    background-color: #c41919;
+    
+}
+.form{
+    width: 24rem;
+    background-color: #fff;
+    padding: 1rem;
+    color :#0d4992;
+}
+p{
+    color:#4d4b4b
+}
+h2{
+    color: #fff;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 250px de largeur minimale pour chaque colonne */
+    gap: 20px; /* Espacement entre les éléments de la grille */
+}
+
+.commentaire {
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
