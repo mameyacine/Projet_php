@@ -1,4 +1,5 @@
-<?php
+
+   <?php
 session_start(); // Démarre la session
 
 try {
@@ -81,17 +82,17 @@ try {
         $commentaires = $stmtCommentaires->fetchAll(PDO::FETCH_ASSOC);
 
         // Affichage du tableau de bord du intervenant
-        echo "<nav class='bg-gray-800 text-white p-4 mb-8'>
-            <div class='container mx-auto flex justify-between items-center'>
-                <span class='text-2xl font-bold'>Intervenant Dashboard</span>
-                <div>
-                    <a href='intervenant.php?idINT=" . $id_intervenant . "'>Retour</a>
-                </div>
+        echo "   <nav class='p-4 mb-8'>
+        <div class='mx-auto flex justify-between items-center'>
+            <h2 class='text-2xl font-bold'>Intervenant Dashboard</h2>
+            <a class='button' href='intervenant.php?idINT=$id_intervenant'><i class='fas fa-arrow-rotate-left'></i></a>
             </div>
-        </nav>";
+    </nav>";
 
         // Affichage des détails de l'intervention
-        echo "<h2 class='text-xl font-bold mb-4'>Détails de l'intervention :</h2>";
+        echo "<div class='container mx-auto p-4 '>
+
+        <h1 class='text-3xl font-bold mb-4'>Détails de l'intervention :</h1>";
         echo "<p>Description : " . htmlspecialchars($intervention['description']) . "</p>";
         echo "<p>Client : " . htmlspecialchars($nom_utilisateur_client) . "</p>"; // Utiliser le nom d'utilisateur du client récupéré précédemment
         echo "<p>Date: " . (isset($intervention['date_heure']) ? htmlspecialchars(date("d-m-Y", strtotime($intervention['date_heure']))) : '') . "</p>";
@@ -101,28 +102,28 @@ try {
 
         // Affichage des commentaires associés à l'intervention
         if ($commentaires) {
-            echo "<h3 class='text-xl font-bold mb-4'>Commentaires :</h3>";
-            echo "<ul class='divide-y divide-gray-200'>";
+            echo "<h1 class='text-xl font-bold my-4'>Commentaires :</h1>";
+            echo "<div class='grid-container'>";
             foreach ($commentaires as $commentaire) {
                 // Récupérer le nom d'utilisateur associé à l'ID utilisateur du commentaire
                 $stmtNomUtilisateur = $pdo->prepare('SELECT nom_utilisateur FROM Utilisateur WHERE ID_utilisateur = ? ');
                 $stmtNomUtilisateur->execute([$commentaire['ID_utilisateur']]);
                 $nom_utilisateur = $stmtNomUtilisateur->fetch(PDO::FETCH_ASSOC)['nom_utilisateur'];
 
+
                 $date_heure_format = date("d-m-Y H:i", strtotime($commentaire['date_heure']));
 
+
                 // Afficher le commentaire avec le nom d'utilisateur, la date et l'heure, puis le contenu
-                echo "<li class='py-4'>";
-                echo "<div class=''>";
+                echo "<div class='commentaire'>";
                 echo "<div class='mr-4 flex justify-between items-center'>";
                 echo "<strong class='text-lg'>" . htmlspecialchars($nom_utilisateur) . "</strong><br>";
-                echo "<small class='text-gray-500'>" . htmlspecialchars($date_heure_format) . "</small>";
+                echo "<small class='text-gray-500'>" . htmlspecialchars($date_heure_format) . "</small>";               
                 echo "</div>";
                 echo "<div class='flex-grow'>";
                 echo htmlspecialchars($commentaire['contenu']);
                 echo "</div>";
                 echo "</div>";
-                echo "</li>";
             }
             echo "</ul>";
         } else {
@@ -135,47 +136,57 @@ try {
         echo "<textarea name='contenu' rows='1' cols='30' required></textarea>";
 
         // Récupérer l'ID utilisateur à partir de la table Utilisateur
-        $stmtIntervenantId = $pdo->prepare('SELECT ID_utilisateur FROM Intervenant WHERE ID_intervenant = :id_intervenant');
-        $stmtIntervenantId->execute(['id_intervenant' => $id_intervenant]);
-        $result = $stmtIntervenantId->fetch(PDO::FETCH_ASSOC);
+        $stmtintervenantId = $pdo->prepare('SELECT ID_utilisateur FROM intervenant WHERE ID_intervenant = :id_intervenant');
+        $stmtintervenantId->execute(['id_intervenant' => $id_intervenant]);
+        $result = $stmtintervenantId->fetch(PDO::FETCH_ASSOC);
         $id_utilisateur = $result['ID_utilisateur'];
 
         echo "<input type='hidden' name='id_utilisateur' value='$id_utilisateur'>";
 
-        echo "<input class='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2' type='submit' value='Ajouter'>";
+        echo "<button class=' button text-white rounded  ml-2' type='submit' >Ajouter</button>";
         echo "</form>";
         echo "</div>";
 
     } else { // Si l'ID de l'intervention n'est pas défini
         // Affichage du formulaire de recherche de l'intervention
-        echo "<nav class='bg-gray-800 text-white p-4 mb-8'>
-            <div class='container mx-auto flex justify-between items-center'>
-                <span class='text-2xl font-bold'>Intervenant Dashboard</span>
-                <div>
-                    <a href='intervenant.php?idINT=" . $id_intervenant . "'>Retour</a>
-                </div>
+            echo "   <nav class='p-4 mb-8'>
+        <div class='mx-auto flex justify-between items-center'>
+            <h2 class='text-2xl font-bold'>Intervenant Dashboard</h2>
+            <a class='button' href='intervenant.php?idINT=$id_intervenant'><i class='fas fa-arrow-rotate-left'></i></a>
             </div>
-        </nav>";
-        echo "<h1 class='text-3xl font-bold mb-8'>Recherche </h1>";
-        echo "<form method='post' action='' class='mb-8'>
+    </nav>";
+
+
+                
+        echo "    <div class='container mx-auto p-4'>
+
+        <h1 class='text-3xl font-bold '>Recherche </h1>";
+        echo "<form method='post' action='' class='mb-4'>
                 <input type='hidden' name='idINT' value='" . (isset($_GET['idINT']) ? htmlspecialchars($_GET['idINT']) : '') . "'>
-                <label for='description' class='block mb-2'>Description de l'intervention :</label>
-                <input type='text' id='description' name='description' required class='block w-full rounded border-gray-400 border px-4 py-2 mb-2'>
-                <input type='submit' value='Rechercher' class='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'>
+                <div class='w-full'>
+                    <label for='description' class='block form text-sm font-bold '>Description de l'intervention :</label>
+                    <input type='text' id='description' name='description' required class='w-5/6 px-3 py-2 border rounded-lg focus:outline-none '>
+                    <button type='submit' class='button rounded' name='search'><i class='fas fa-search'></i></button>
+                </div>
             </form>";
 
         // Affichage des résultats de la recherche
         if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_GET['id'])) {
             if ($interventions) {
-                echo "<h2 class='text-xl font-bold mb-4'>Résultats de la recherche :</h2>";
-                echo "<ul>";
+                echo "<h1 class='text-xl font-bold mb-4'>Résultats de la recherche :</h1>";
+                echo "<ul>
+                <div>";
                 foreach ($interventions as $intervention) {
-                    echo "<li class='mb-2'>
-                            " . htmlspecialchars($intervention['description']) . " -
-                            <a href='" . htmlspecialchars($_SERVER["PHP_SELF"]) . "?id=" . $intervention['ID_intervention'] . "&idINT=" . htmlspecialchars($id_intervenant) . "' class='text-blue-500 hover:underline'>Voir les détails</a>
-                        </li>";
+                    echo "<li class='p-4'>
+                    " . htmlspecialchars($intervention['description']) . " 
+                    <a href='" . htmlspecialchars($_SERVER["PHP_SELF"]) . "?id=" . $intervention['ID_intervention'] . "&idINT=" . htmlspecialchars($id_intervenant) . "' class='button'><i class='fas fa-eye'></i></a>
+                </li>";
+
+                
+            
                 }
-                echo "</ul>";
+                echo "</ul>
+                </div>";
             } else {
                 echo "<p class='text-red-500'>Aucune intervention trouvée avec la description \"" . $description . "\"</p>";
             }
@@ -184,6 +195,7 @@ try {
 } catch (PDOException $e) {
     die("<p class='text-red-500 font-bold'>Erreur lors de la récupération des données : " . $e->getMessage() . "</p>");
 }
+echo "</div>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -191,11 +203,8 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commentaires</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="public/style.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"></head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
 <body>
-
-</body>
-</html>

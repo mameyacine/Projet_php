@@ -110,7 +110,7 @@ if ($id_intervenant !== null) {
     </div>
 </nav>
     <!-- Formulaire de recherche d'intervention -->
-    <div class="container mx-auto">
+    <div class="container mx-auto p-2">
         <h1 class="text-3xl font-bold mb-4 text-center p-4">Rechercher une intervention</h1>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?idINT=<?php echo htmlspecialchars($id_intervenant); ?>" method="post" class="mb-4">
             <input type="hidden" name="id_intervenant" value="<?php echo htmlspecialchars($id_intervenant); ?>">
@@ -122,36 +122,54 @@ if ($id_intervenant !== null) {
         <!-- Affichage des résultats de recherche -->
         <?php if (!empty($search_results)) : ?>
             <h1 class="text-2xl font-bold mt-8 mb-4">Résultats de la recherche :</h1>
-            <ul>
-                <?php foreach ($search_results as $result) : ?>
-                    <li>
-                        <?php echo htmlspecialchars($result['description']); ?> - 
-                        <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?id_intervention=<?php echo htmlspecialchars($result['ID_intervention']); ?>&idINT=<?php echo htmlspecialchars($id_intervenant); ?>">Modifier</a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+          
+
+                    <ul>
+                        <div>
+                        <?php foreach ($search_results as $result) : ?>
+                            <li class="p-4"><?php echo htmlspecialchars($result['description']); ?>
+                                <a class="button" href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?id_intervention=<?php echo htmlspecialchars($result['ID_intervention']); ?>&idINT=<?php echo htmlspecialchars($id_intervenant); ?>"><i class="fas fa-edit"></i></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                        </div>
         <?php endif; ?>
-    </div>
 
     <!-- Formulaire de modification d'intervention -->
     <?php if (isset($intervention)) : ?>
-    <div class="container mx-auto">
-        <h1 class="text-3xl font-bold mb-4">Modifier l'intervention</h1>
-        <form action="" method="post">
+
+        <h1 class="text-3xl font-bold mb-4 p-4 text-center">Modifier l'intervention</h1>
+
+        <div class=" mx-auto flex justify-center">
+
+        <form action="" method="post" class="form">
+
+        <div class="mb-4">
+
             <input type="hidden" name="id_intervention" value="<?php echo $intervention['ID_intervention']; ?>">
             <input type="text" name="description" value="<?php echo htmlspecialchars($description); ?>">
+        </div>
+        <div class="mb-4">
             <select name="statut">
                 <option value="En attente" <?php if($statut == 'En attente') echo 'selected'; ?>>En attente</option>
                 <option value="En cours" <?php if($statut == 'En cours') echo 'selected'; ?>>En cours</option>
                 <option value="Terminé" <?php if($statut == 'Terminé') echo 'selected'; ?>>Terminé</option>
             </select>
+
+        </div>
+        <div class="mb-4">
+
             <select name="degre_urgence">
                 <option value="Faible" <?php if($degre_urgence == 'Faible') echo 'selected'; ?>>Faible</option>
                 <option value="Moyen" <?php if($degre_urgence == 'Moyen') echo 'selected'; ?>>Moyen</option>
                 <option value="Élevé" <?php if($degre_urgence == 'Élevé') echo 'selected'; ?>>Élevé</option>
             </select>
-            <input type="submit" name="update" value="Mettre à jour">
+
+        </div>
+
+            <button type="submit" class="button" >Mettre à jour</button>
         </form>
+        </div>
     </div>
     <?php endif; ?>
 

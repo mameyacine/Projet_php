@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="mx-auto flex justify-between items-center">
         <h2 class="text-2xl font-bold">Client Dashboard</h2>
         
-        <a href="client.php?idC=<?php echo htmlspecialchars($id_client); ?>" class="delete bg-red-500"><i class="fas fa-arrow-rotate-left"></i></a>
+        <a href="client.php?idC=<?php echo htmlspecialchars($id_client); ?>" class="button"><i class="fas fa-arrow-rotate-left"></i></a>
 
     </div>
 </nav>
