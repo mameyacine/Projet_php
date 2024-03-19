@@ -132,7 +132,7 @@ $id_admin = isset($_GET['idA']) ? $_GET['idA'] : null;
                     // Fin du conteneur de grille
                     echo "</div>";
                 } else {
-                    echo "<p>Aucun commentaire pour cette intervention.</p>";
+                    echo "<p class='font-bold'>Aucun commentaire pour cette intervention.</p>";
                 }
                 
 

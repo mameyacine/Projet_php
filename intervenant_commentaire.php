@@ -127,13 +127,13 @@ try {
             }
             echo "</ul>";
         } else {
-            echo "<p>Aucun commentaire pour cette intervention.</p>";
+            echo "<p class='font-bold'>Aucun commentaire pour cette intervention.</p>";
         }
 
         echo "<div class='fixed bottom-0 w-full bg-gray-100 p-2'>";
         echo "<form class='flex items-center' method='post' action='" . htmlspecialchars($_SERVER["PHP_SELF"]) . "?id=" . $id_intervention . "&idINT=" . htmlspecialchars($id_intervenant) . "'>";
         echo "<input type='hidden' name='id_intervention' value='$id_intervention'>";
-        echo "<textarea name='contenu' rows='1' cols='30' required></textarea>";
+        echo "<textarea name='contenu' rows='3' cols='30' required></textarea>";
 
         // Récupérer l'ID utilisateur à partir de la table Utilisateur
         $stmtintervenantId = $pdo->prepare('SELECT ID_utilisateur FROM intervenant WHERE ID_intervenant = :id_intervenant');

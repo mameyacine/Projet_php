@@ -61,8 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
 
 <!-- Contenu de la page -->
 <div class="container mx-auto p-4 ">
-    <h1 class="text-3xl font-bold mb-4 text-center">Modifier une intervention</h1>
     <?php if (!isset($_GET['id']) || !isset($_GET['idA'])): ?>
+        <h1 class="text-3xl font-bold mb-4 text-center">Rechercher une intervention</h1>
 
     <!-- Formulaire de recherche -->
     <form action="" method="post" class="mb-4">
@@ -119,6 +119,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
     
     ?>
     <!-- Formulaire de modification -->
+            <h1 class="text-3xl font-bold mb-4 text-center">Modifier une intervention</h1>
+
     <div class=" mx-auto flex justify-center">
     <form action="" method="post" class="form">
         <input type="hidden" name="id_intervention" value="<?php echo $intervention['ID_intervention']; ?>">

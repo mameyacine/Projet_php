@@ -58,9 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
 
-<h1 class="text-3xl font-bold mb-4">Réinitialiser le mot de passe</h1>
+<h1 class="text-3xl font-bold m-4 p-4 text-center">Réinitialiser le mot de passe</h1>
+<div class=" mx-auto flex justify-center">
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="form">
     <div class="mb-4">
         <label class="block mb-2" for="username">Nom d'utilisateur :</label>
         <input class="w-full px-3 py-2 border rounded-md" type="text" id="username" name="username" required>
@@ -76,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <input class="w-full px-3 py-2 border rounded-md" type="password" id="confirm_password" name="confirm_password" required>
     </div>
 
-    <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" type="submit">Réinitialiser le mot de passe</button>
+    <button class="button bg-blue-700 py-2 px-4 " type="submit">Enregistrer</button>
 </form>
 
 </body>

@@ -124,7 +124,7 @@ if ($commentaires) {
     }
     echo "</ul>";
 } else {
-    echo "<p>Aucun commentaire pour cette intervention.</p>";
+    echo "<p class ='font-bold'>Aucun commentaire pour cette intervention.</p>";
 }
 
 
@@ -133,7 +133,7 @@ if ($commentaires) {
 echo "<div class='fixed bottom-0 w-full bg-gray-100 p-2'>";
 echo "<form class='flex items-center' method='post' action='" . htmlspecialchars($_SERVER["PHP_SELF"]) . "?id=" . $id_intervention . "&idC=" . htmlspecialchars($id_client) . "'>";
 echo "<input type='hidden' name='id_intervention' value='$id_intervention'>";
-echo "<textarea name='contenu' rows='1' cols='30' required></textarea>";
+echo "<textarea name='contenu' rows='3' cols='30' required></textarea>";
 
 // Récupérer l'ID utilisateur à partir de la table Client
 $stmtClientId = $pdo->prepare('SELECT ID_utilisateur FROM Client WHERE ID_client = :id_client');
@@ -205,7 +205,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <!-- Champ caché pour l'ID admin -->
                 <input type="hidden" name="idC" value="<?php echo isset($_GET['idC']) ? htmlspecialchars($_GET['idC']) : ''; ?>">
                 <label for="description" class="block mb-2">Description de l'intervention :</label>
-                <input type="text" id="description" name="description" required class="block w-full rounded border-gray-400 border px-4 py-2 mb-2">
+                <input type="text" id="description" name="description" required class="w-5/6 px-3 py-2 border rounded-lg focus:outline-none m-2">
                 <button type="submit" name="search" class="button rounded"> <i class="fas fa-search"></i></button>
 
             </div>

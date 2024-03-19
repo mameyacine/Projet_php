@@ -109,31 +109,35 @@ if ($id_intervenant !== null) {
 
     </div>
 </nav>
-    <!-- Formulaire de recherche d'intervention -->
-    <div class="container mx-auto p-2">
-        <h1 class="text-3xl font-bold mb-4 text-center p-4">Rechercher une intervention</h1>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?idINT=<?php echo htmlspecialchars($id_intervenant); ?>" method="post" class="mb-4">
-            <input type="hidden" name="id_intervenant" value="<?php echo htmlspecialchars($id_intervenant); ?>">
-            <label for="search" class="block form text-sm font-bold ">Recherche par description :</label>
-            <input type="text" name="search" id="search" class="w-5/6 px-3 py-2 border rounded-lg focus:outline-none m-2" >
-            <button type="submit" class="button rounded" name="search"><i class="fas fa-search"></i></button>
-        </form>
-     
-        <!-- Affichage des résultats de recherche -->
-        <?php if (!empty($search_results)) : ?>
-            <h1 class="text-2xl font-bold mt-8 mb-4">Résultats de la recherche :</h1>
-          
 
-                    <ul>
-                        <div>
-                        <?php foreach ($search_results as $result) : ?>
-                            <li class="p-4"><?php echo htmlspecialchars($result['description']); ?>
-                                <a class="button" href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?id_intervention=<?php echo htmlspecialchars($result['ID_intervention']); ?>&idINT=<?php echo htmlspecialchars($id_intervenant); ?>"><i class="fas fa-edit"></i></a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                        </div>
-        <?php endif; ?>
+    <!-- Formulaire de recherche d'intervention -->
+    <?php if (!isset($intervention)) : ?>
+        <div class="container mx-auto p-2">
+            <h1 class="text-3xl font-bold mb-4 text-center p-4">Rechercher une intervention</h1>
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?idINT=<?php echo htmlspecialchars($id_intervenant); ?>" method="post" class="mb-4">
+                <input type="hidden" name="id_intervenant" value="<?php echo htmlspecialchars($id_intervenant); ?>">
+                <label for="search" class="block form text-sm font-bold ">Recherche par description :</label>
+                <input type="text" name="search" id="search" class="w-5/6 px-3 py-2 border rounded-lg focus:outline-none m-2" >
+                <button type="submit" class="button rounded" name="search"><i class="fas fa-search"></i></button>
+            </form>
+         
+            <!-- Affichage des résultats de recherche -->
+            <?php if (!empty($search_results)) : ?>
+                <h1 class="text-2xl font-bold mt-8 mb-4">Résultats de la recherche :</h1>
+              
+
+                <ul>
+                    <div>
+                    <?php foreach ($search_results as $result) : ?>
+                        <li class="p-4"><?php echo htmlspecialchars($result['description']); ?>
+                            <a class="button" href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?id_intervention=<?php echo htmlspecialchars($result['ID_intervention']); ?>&idINT=<?php echo htmlspecialchars($id_intervenant); ?>"><i class="fas fa-edit"></i></a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+                    </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
     <!-- Formulaire de modification d'intervention -->
     <?php if (isset($intervention)) : ?>
@@ -146,7 +150,7 @@ if ($id_intervenant !== null) {
 
         <div class="mb-4">
 
-            <input type="hidden" name="id_intervention" value="<?php echo $intervention['ID_intervention']; ?>">
+            <input type="hidden"  name="id_intervention" value="<?php echo $intervention['ID_intervention']; ?>">
             <input type="text" name="description" value="<?php echo htmlspecialchars($description); ?>">
         </div>
         <div class="mb-4">
@@ -167,7 +171,7 @@ if ($id_intervenant !== null) {
 
         </div>
 
-            <button type="submit" class="button" >Mettre à jour</button>
+            <button type="submit" class="button" name="update">Mettre à jour</button>
         </form>
         </div>
     </div>
