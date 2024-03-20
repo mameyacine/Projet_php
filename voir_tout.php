@@ -11,11 +11,13 @@ $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
 // Requête pour récupérer toutes les interventions avec la date/heure et les noms des clients, intervenants et standardistes
 $stmt_interventions = $pdo->prepare("
-    SELECT Intervention.*, Client.nom AS client_nom, Intervenant.nom_utilisateur AS intervenant_nom, Standardiste.nom_utilisateur AS standardiste_nom
+    SELECT Intervention.*, CONCAT(Client.prenom, ' ', Client.nom) AS client ,CONCAT(Intervenant.prenom, ' ', Intervenant.nom) AS intervenant , CONCAT(standardiste.prenom, ' ', standardiste.nom) AS standardiste
     FROM Intervention
     LEFT JOIN Client ON Intervention.ID_client = Client.ID_client
     LEFT JOIN Intervenant ON Intervention.ID_intervenant = Intervenant.ID_intervenant
     LEFT JOIN Standardiste ON Intervention.ID_standardiste = Standardiste.ID_standardiste
+    WHERE  (Intervention.statut = 'En cours' OR Intervention.statut = 'En attente' ) 
+
     ORDER BY $orderBy $order
 ");
 $stmt_interventions->execute();
@@ -44,8 +46,17 @@ $stmt_interventions->execute();
     </nav>
 
 <!-- Contenu de la page -->
-<div class="container mx-auto">
-    <h1 class="text-3xl font-bold m-4 pt-4 text-center">Toutes les interventions</h1> <!-- Ajout de la classe "mt-8" pour la marge en haut -->
+<div class="mx-auto flex justify-between">
+    <h1 class="text-3xl font-bold m-4 pt-4 text-center">Toutes les interventions</h1>
+    <div class="flex items-center"> <!-- Ajout de la classe "items-center" pour centrer verticalement -->
+        <a href="standardiste_historiquevoirtout.php?idST=<?php echo htmlspecialchars($id_standardiste); ?>" class=" button mr-4 inline-flex items-center"> <!-- Ajout de classes pour styliser le bouton -->
+            <i class="fas fa-book mr-2"></i> <!-- Ajout de la classe "mr-2" pour un espace entre l'icône et le texte -->
+
+        </a>
+    </div>
+</div>
+
+<div class="container mx-auto p-2">
 
     <table class="table min-w-full bg-white">
         <thead class=" text-white">
@@ -84,9 +95,9 @@ $stmt_interventions->execute();
             echo "<td class='py-3 px-4'>" . htmlspecialchars($row['description']) . "</td>";
             echo "<td class='py-3 px-4'>" . htmlspecialchars($row['statut']) . "</td>";
             echo "<td class='py-3 px-4'>" . htmlspecialchars($row['degre_urgence']) . "</td>";
-            echo "<td class='py-3 px-4'>" . htmlspecialchars($row['client_nom']) . "</td>";
-            echo "<td class='py-3 px-4'>" . htmlspecialchars($row['intervenant_nom']) . "</td>";
-            echo "<td class='py-3 px-4'>" . htmlspecialchars($row['standardiste_nom']) . "</td>";
+            echo "<td class='py-3 px-4'>" . htmlspecialchars($row['client']) . "</td>";
+            echo "<td class='py-3 px-4'>" . htmlspecialchars($row['intervenant']) . "</td>";
+            echo "<td class='py-3 px-4'>" . htmlspecialchars($row['standardiste']) . "</td>";
             echo "<td class='py-3 px-4'>" . htmlspecialchars(date('d-m-Y', strtotime($row['date_heure']))) . "</td>";
             echo "<td class='py-3 px-4'>" . htmlspecialchars(date('H:i', strtotime($row['date_heure']))) . "</td>";
             echo "</tr>";

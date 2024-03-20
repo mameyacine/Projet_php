@@ -39,7 +39,7 @@ if ($id_standardiste !== null) {
     $id_standardiste_row = $stmt_standardiste->fetch(PDO::FETCH_ASSOC);
 
     if ($id_standardiste_row !== false) {
-        $stmt_interventions = $pdo->prepare("SELECT i.description, i.date_heure, i.degre_urgence, i.statut, c.nom_utilisateur, CONCAT(c.num_rue, ' ', c.nom_rue, ', ', c.code_postal, ' ', c.ville) AS lieu_intervention FROM Intervention i INNER JOIN Client c ON i.ID_client = c.ID_client WHERE i.ID_standardiste = ? ORDER BY $orderBy $orderDirection");
+        $stmt_interventions = $pdo->prepare("SELECT i.description, i.date_heure, i.degre_urgence, i.statut, c.nom_utilisateur, CONCAT(c.num_rue, ' ', c.nom_rue, ', ', c.code_postal, ' ', c.ville) AS lieu_intervention FROM Intervention i INNER JOIN Client c ON i.ID_client = c.ID_client WHERE i.ID_standardiste = ? AND (i.statut = 'En cours' OR i.statut = 'En attente' ) ORDER BY $orderBy $orderDirection");
         $stmt_interventions->execute([$id_standardiste]);
         $interventions = $stmt_interventions->fetchAll(PDO::FETCH_ASSOC);
     } else {
@@ -87,17 +87,19 @@ if ($id_standardiste !== null) {
     </div>
 <?php else : ?>
 
-
-
-    <div class="container mx-auto">
     <div class="flex justify-between p-4">
         <h1 class="text-3xl font-bold m-4">Mes Interventions</h1>
         <div clas="flex m-4">
             <a href="creer_standardiste.php?idST=<?php echo htmlspecialchars($id_standardiste); ?>" class="button"><i class="fas fa-plus-circle"></i></a>
             <a href="standardiste_modif.php?idST=<?php echo htmlspecialchars($id_standardiste); ?>" class="button"><i class="fas fa-edit"></i></a>
             <a href="standardiste_commentaire.php?idST=<?php echo htmlspecialchars($id_standardiste); ?>" class="button"><i class="fa-regular fa-comment"></i></a>
+            <a href="standardiste_historique.php?idST=<?php echo htmlspecialchars($id_standardiste); ?>" class="button"><i class="fas fa-book"></i></a>
+
         </div>
     </div>
+
+    <div class="container mx-auto p-2">
+
         <?php if (isset($interventions)) : ?>
             <table class="table min-w-full bg-white">
                 <thead class=" text-white">

@@ -44,10 +44,10 @@ function reverseOrder($order)
         </div>
     </nav>
 
-
-
-<div class="container mx-auto">
     <h1 class="text-3xl font-bold m-4 pt-4 text-center">Tous les clients</h1>
+
+
+<div class="container mx-auto p-2">
 
     <!-- Tableau des clients -->
     

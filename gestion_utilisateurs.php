@@ -101,7 +101,7 @@ list($intervenants, $sort_direction_intervenants) = getUtilisateursDetails($pdo,
     </div>
     
 
-    <div class="container mx-auto">
+    <div class="container mx-auto p-2">
  
 
     <!-- Tableau des utilisateurs -->

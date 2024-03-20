@@ -40,8 +40,10 @@ if ($id_intervenant !== null) {
         $orderDirection = isset($_GET['orderDir']) && strtoupper($_GET['orderDir']) === 'DESC' ? 'DESC' : 'ASC';
 
         // Préparation de la requête SQL avec le tri
-        $stmt_interventions = $pdo->prepare("SELECT i.description, i.date_heure, i.degre_urgence, i.statut, c.nom_utilisateur, CONCAT(c.nom_rue, ' ', c.num_rue, ', ', c.code_postal, ' ', c.ville) AS lieu_intervention FROM Intervention i INNER JOIN Client c ON i.ID_client = c.ID_client WHERE i.ID_intervenant = ? ORDER BY $orderBy $orderDirection");
+        $stmt_interventions = $pdo->prepare("SELECT i.description, i.date_heure, i.degre_urgence, i.statut,CONCAT(c.prenom, ' ', c.nom) AS client , CONCAT(c.nom_rue, ' ', c.num_rue, ', ', c.code_postal, ' ', c.ville) AS lieu_intervention FROM Intervention i INNER JOIN Client c ON i.ID_client = c.ID_client WHERE i.ID_intervenant = ? AND (i.statut = 'En cours' OR i.statut = 'En attente') ORDER BY $orderBy $orderDirection");
         $stmt_interventions->execute([$id_intervenant]);
+        
+        
         $interventions = $stmt_interventions->fetchAll(PDO::FETCH_ASSOC);
     } else {
         $error_message = "Aucun intervenant correspondant trouvé.";
@@ -75,22 +77,23 @@ if ($id_intervenant !== null) {
     </nav>
 
 <?php if (isset($error_message)) : ?>
-    <div class="container mx-auto">
+    <div class="container mx-auto p-2">
         <h1 class="text-3xl font-bold mb-4">Erreur</h1>
         <p class="text-red-500"><?php echo $error_message; ?></p>
     </div>
 <?php else : ?>
-
-
-    <div class="container mx-auto">
 
     <div class="flex justify-between items-center p-2">
     <h1 class="text-3xl font-bold m-4">Mes interventions</h1>
         <div class="flex items-center"> <!-- Ajout de la classe "flex" -->
             <a href="intervenant_modif.php?idINT=<?php echo htmlspecialchars($id_intervenant); ?>" class="button"><i class="fas fa-edit"></i></a>
             <a href="intervenant_commentaire.php?idINT=<?php echo htmlspecialchars($id_intervenant); ?>" class="button"><i class="fa-regular fa-comment"></i></a>
+            <a href="intervenant_historique.php?idINT=<?php echo htmlspecialchars($id_intervenant); ?>" class="button"><i class="fas fa-book"></i></a>
         </div>
     </div>
+    <div class="container mx-auto p-2">
+
+
 
        
         <table class="table min-w-full bg-white">
@@ -108,7 +111,7 @@ if ($id_intervenant !== null) {
             <tbody>
             <?php foreach ($interventions as $intervention) : ?>
                 <tr>
-                    <td class="py-3 px-4"><?php echo isset($intervention['nom_utilisateur']) ? htmlspecialchars($intervention['nom_utilisateur']) : ''; ?></td>
+                <td class="py-3 px-4"><?php echo isset($intervention['client']) ? htmlspecialchars($intervention['client']) : ''; ?></td>
                     <td class="py-3 px-4"><?php echo isset($intervention['description']) ? htmlspecialchars($intervention['description']) : ''; ?></td>
                     <td class="py-3 px-4"><?php echo isset($intervention['date_heure']) ? htmlspecialchars(date("d-m-Y", strtotime($intervention['date_heure']))) : ''; ?></td>
                     <td class="py-3 px-4"><?php echo isset($intervention['date_heure']) ? htmlspecialchars(date("H:i", strtotime($intervention['date_heure']))) : ''; ?></td>
