@@ -32,16 +32,14 @@ $pdo = new PDO("mysql:host=localhost;dbname=projet_php", "root", "");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Requête pour récupérer toutes les interventions avec la date/heure et les noms d'utilisateur des intervenants et des standardistes
+// Requête pour récupérer toutes les interventions avec la date/heure et les noms d'utilisateur des intervenants et des standardistes
 $stmt_interventions = $pdo->prepare("
-    SELECT Intervention.*, 
-        CONCAT(Intervenant.prenom, ' ', Intervenant.nom) AS intervenant,
-        CONCAT(Standardiste.prenom, ' ', Standardiste.nom) AS standardiste
-    FROM Intervention
-    LEFT JOIN Intervenant ON Intervention.ID_intervenant = Intervenant.ID_intervenant
-    LEFT JOIN Standardiste ON Intervention.ID_standardiste = Standardiste.ID_standardiste
-    WHERE Intervention.ID_client = ? AND (Intervention.statut = 'En cours' OR Intervention.statut = 'En attente' ) 
+    SELECT * 
+    FROM Demande
+    WHERE id_client = ?
     ORDER BY $sortBy $order
 ");
+
 
 $stmt_interventions->execute([$idClient]);
 ?>
@@ -63,43 +61,37 @@ $stmt_interventions->execute([$idClient]);
     <div class="mx-auto flex justify-between items-center">
         <h2 class="text-2xl font-bold">Client Dashboard</h2>
         <div class="flex">
-            <a href="completer.php?idC=<?php echo htmlspecialchars($idClient); ?>" class="button">Modifier mes informations</a>
-            <!-- Bouton de déconnexion -->
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <button type="submit" name="logout" class="delete bg-red-500 text-white rounded-md"><i class="fas fa-sign-out-alt"></i></button>
-            </form>
+            <a href="client.php?idC=<?php echo htmlspecialchars($idClient); ?>" class="button"><i class="fas fa-arrow-rotate-left"></i> </a>
+
         </div>
     </div>
 </nav>
 
 
 <div class="flex justify-between items-center p-2">
-    <h1 class="text-3xl font-bold m-4">Mes interventions</h1>
+    <h1 class="text-3xl font-bold m-4">Mes demandes</h1>
         <div class="flex items-center"> 
-             <a href="mes_demandes.php?idC=<?php echo htmlspecialchars($idClient); ?>" class="button ">Mes demandes</a>
+             <a href="demande.php?idC=<?php echo htmlspecialchars($idClient); ?>" class="button "><i class="fas fa-plus-circle"></i></a>
 
-            <a href="client_historique.php?idC=<?php echo htmlspecialchars($idClient); ?>" class="button"><i class="fas fa-book"></i></a>
         </div>
     </div>
 <div class="container mx-auto p-2">
     <table class="table min-w-full bg-white">
         <thead class="text-white">
             <tr class="bg-gray-200">
-                <th class="border border-gray-400 px-4 py-2"><a href="?idC=<?php echo htmlspecialchars($idClient); ?>&sort_by=intervenant&order=<?php echo ($sortBy == 'intervenant' && $order == 'asc') ? 'desc' : 'asc'; ?>">Intervenant</a></th>
-                <th class="border border-gray-400 px-4 py-2"><a href="?idC=<?php echo htmlspecialchars($idClient); ?>&sort_by=standardiste&order=<?php echo ($sortBy == 'standardiste' && $order == 'asc') ? 'desc' : 'asc'; ?>">Standardiste</a></th>
                 <th class="border border-gray-400 px-4 py-2"><a href="?idC=<?php echo htmlspecialchars($idClient); ?>&sort_by=description&order=<?php echo ($sortBy == 'description' && $order == 'asc') ? 'desc' : 'asc'; ?>">Description</a></th>
                 <th class="border border-gray-400 px-4 py-2"><a href="?idC=<?php echo htmlspecialchars($idClient); ?>&sort_by=date_heure&order=<?php echo ($sortBy == 'date_heure' && $order == 'asc') ? 'desc' : 'asc'; ?>">Date</a></th>
                 <th class="border border-gray-400 px-4 py-2"><a href="?idC=<?php echo htmlspecialchars($idClient); ?>&sort_by=date_heure&order=<?php echo ($sortBy == 'date_heure' && $order == 'asc') ? 'desc' : 'asc'; ?>">Heure</a></th>
 
                 <th class="border border-gray-400 px-4 py-2"><a href="?idC=<?php echo htmlspecialchars($idClient); ?>&sort_by=degre_urgence&order=<?php echo ($sortBy == 'degre_urgence' && $order == 'asc') ? 'desc' : 'asc'; ?>">Degré d'urgence</a></th>
-                <th class="border border-gray-400 px-4 py-2"><a href="?idC=<?php echo htmlspecialchars($idClient); ?>&sort_by=statut&order=<?php echo ($sortBy == 'statut' && $order == 'asc') ? 'desc' : 'asc'; ?>">Statut</a></th>
+                <th class="border border-gray-400 px-4 py-2"><a href="?idC=<?php echo htmlspecialchars($idClient); ?>&sort_by=statut_demande&order=<?php echo ($sortBy == 'statut_demande' && $order == 'asc') ? 'desc' : 'asc'; ?>">Statut de la demande</a></th>
+
             </tr>
         </thead>
         <tbody class="text-gray-700">
             <?php while ($row = $stmt_interventions->fetch(PDO::FETCH_ASSOC)): ?>
                 <tr class="border-b">
-                    <td class="border-r py-3 px-4"><?php echo ($row['intervenant']) ? htmlspecialchars($row['intervenant']) : ''; ?></td>
-                    <td class="border-r py-3 px-4"><?php echo ($row['standardiste']) ? htmlspecialchars($row['standardiste']) : ''; ?></td>
+
                     <td class="border-r py-3 px-4"><?php echo htmlspecialchars($row['description']); ?></td>
                     <?php
                     // Séparer la date et l'heure
@@ -108,11 +100,11 @@ $stmt_interventions->execute([$idClient]);
                     $heure = $date_heure->format('H:i');
                     ?>
                     <td class="border-r py-3 px-4"><?php echo htmlspecialchars($date); ?></td>
-                    <td class="border-r py-3 px-4"><?php echo
-htmlspecialchars($heure); ?></td>
-<td class="border-r py-3 px-4"><?php echo htmlspecialchars($row['degre_urgence']); ?></td>
-<td class="py-3 px-4"><?php echo htmlspecialchars($row['statut']); ?></td>
-</tr>
+                    <td class="border-r py-3 px-4"><?php echo htmlspecialchars($heure); ?></td>
+                    <td class="border-r py-3 px-4"><?php echo htmlspecialchars($row['degre_urgence']); ?></td>
+                    <td class="py-3 px-4"><?php echo htmlspecialchars($row['statut_demande']); ?></td>
+
+                    </tr>
 <?php endwhile; ?>
 </tbody>
 </table>

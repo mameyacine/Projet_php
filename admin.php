@@ -54,14 +54,17 @@ $nextOrder = reverseOrder($order);
         </div>
     </nav>
 
-    <div class="flex justify-between p-2">
-        <h1 class="text-3xl font-bold m-4">Toutes les interventions</h1>
-        <div class="flex">
-            <a href="creer_intervention.php?idA=<?php echo htmlspecialchars($id_admin); ?>" class="button "><i class="fas fa-plus-circle"></i></a>
-            <a href="modifier_intervention.php?idA=<?php echo htmlspecialchars($id_admin); ?>" class="button"><i class="fas fa-edit"></i></a>
-            <a href="historique_interventions.php?idA=<?php echo htmlspecialchars($id_admin); ?>" class="button"><i class="fas fa-book"></i></a>
-        </div>
+    <div class="flex justify-between items-center p-2">
+    <h1 class="text-3xl font-bold m-4">Toutes les interventions</h1>
+    <div class="flex space-x-4"> <!-- Utilisez la classe "space-x-4" pour ajouter de l'espace horizontal entre les éléments -->
+        <a href="creer_intervention.php?idA=<?php echo htmlspecialchars($id_admin); ?>" class="button"><i class="fas fa-plus-circle"></i> </a>
+        <a href="modifier_intervention.php?idA=<?php echo htmlspecialchars($id_admin); ?>" class="button"><i class="fas fa-edit"></i> </a>
+        <a href="historique_interventions.php?idA=<?php echo htmlspecialchars($id_admin); ?>" class="button"><i class="fas fa-book"></i> </a>
+        <a href="voir_demandes.php?idA=<?php echo htmlspecialchars($id_admin); ?>" class="button">Voir les demandes</a>
+
     </div>
+</div>
+
 
     <div class="container mx-auto p-2">
         <table class="table min-w-full bg-white">
