@@ -51,4 +51,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: erreur.php");
     exit();
 }
-?>
