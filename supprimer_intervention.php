@@ -17,9 +17,14 @@ if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "GET" && 
     // Récupérer l'ID de l'intervention à supprimer
     $intervention_id = $_GET["id"];
 
+
     // Connexion à la base de données
     $pdo = new PDO("mysql:host=localhost;dbname=projet_php", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+
+    $stmt_delete_commentaires= $pdo->prepare("DELETE FROM Commentaire WHERE ID_intervention= ?"); 
+    $stmt_delete_commentaires->execute([$intervention_id]);
 
     // Requête pour supprimer l'intervention
     $stmt = $pdo->prepare("DELETE FROM Intervention WHERE ID_intervention = ?");

@@ -87,6 +87,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
     }
 }
 
+if ($_SERVER["REQUEST_METHOD"] ==="POST" && isset($_POST["delete"])) {
+
+    // Récupérer l'ID de l'intervention à supprimer
+    $id_intervention = $_POST["id_intervention"];
+
+    // Connexion à la base de données
+    $pdo = new PDO("mysql:host=localhost;dbname=projet_php", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+
+    $stmt_delete_commentaires= $pdo->prepare("DELETE FROM Commentaire WHERE ID_intervention= ?"); 
+    $stmt_delete_commentaires->execute([$id_intervention]);
+
+    // Requête pour supprimer l'intervention
+    $stmt = $pdo->prepare("DELETE FROM Intervention WHERE ID_intervention = ?");
+    $stmt->execute([$id_intervention]);
+
+    // Redirection vers le tableau de toutes les interventions
+    header("Location: standardiste.php?idST=$id_standardiste");
+    exit();
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -105,7 +128,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
         <div class="mx-auto flex justify-between items-center">
             <h2 class="text-2xl font-bold">Standardiste Dashboard</h2>
             <div>
-                <a href="gestion_utilisateurs.php?idST=<?= htmlspecialchars($id_standardiste); ?>" class="button">Gestion des utilisateurs</a>
+            <a href="voir_tout.php?idST=<?= htmlspecialchars($id_standardiste); ?>" class="button">Toutes les interventions</a>
+
+                <a href="clients_tous.php?idST=<?= htmlspecialchars($id_standardiste); ?>" class="button">Tous les clients</a>
+
                 <a href="standardiste.php?idST=<?php echo htmlspecialchars($id_standardiste); ?>" class="button"><i class="fas fa-arrow-rotate-left"></i> </a>
             </div>
         </div>

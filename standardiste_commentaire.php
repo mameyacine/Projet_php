@@ -81,14 +81,18 @@ try {
         $commentaires = $stmtCommentaires->fetchAll(PDO::FETCH_ASSOC);
 
         // Affichage du tableau de bord du standardiste
-        echo "  <nav class='p-4 mb-8'>
-                <div class='mx-auto flex justify-between items-center'>
-                    <h2 class='text-2xl font-bold'>Standardiste Dashboard</h2>
-                    <div>
-                        <a class='button' href='standardiste.php?idST=" . $id_standardiste . "'><i class='fas fa-arrow-rotate-left'></i></a>
+        echo "
+        <nav class='p-4 mb-8'>
+            <div class='mx-auto flex justify-between items-center'>
+                <h2 class='text-2xl font-bold'>Standardiste Dashboard</h2>
+                <div>
+                    <a href='voir_tout.php?idST=" . htmlspecialchars($id_standardiste) . "' class='button'>Toutes les interventions</a>
+                    <a href='clients_tous.php?idST=" . htmlspecialchars($id_standardiste) . "' class='button'>Tous les clients</a>
+                    <a href='standardiste.php?idST=" . htmlspecialchars($id_standardiste) . "' class='button'><i class='fas fa-arrow-rotate-left'></i></a>
                 </div>
             </div>
         </nav>";
+        
 
         // Affichage des détails de l'intervention
         echo "<div class='container mx-auto p-4 '>
@@ -150,14 +154,18 @@ try {
 
     } else { // Si l'ID de l'intervention n'est pas défini
         // Affichage du formulaire de recherche de l'intervention
-       echo "  <nav class='p-4 mb-8'>
-                    <div class='mx-auto flex justify-between items-center'>
-                        <h2 class='text-2xl font-bold'>Standardiste Dashboard</h2>
-                        <div>
-                            <a class='button' href='standardiste.php?idST=" . $id_standardiste ."'><i class='fas fa-arrow-rotate-left'></i></a>
-                        </div>
-                    </div>
-                </nav>";
+        echo "
+        <nav class='p-4 mb-8'>
+            <div class='mx-auto flex justify-between items-center'>
+                <h2 class='text-2xl font-bold'>Standardiste Dashboard</h2>
+                <div>
+                    <a href='voir_tout.php?idST=" . htmlspecialchars($id_standardiste) . "' class='button'>Toutes les interventions</a>
+                    <a href='clients_tous.php?idST=" . htmlspecialchars($id_standardiste) . "' class='button'>Tous les clients</a>
+                    <a href='standardiste.php?idST=" . htmlspecialchars($id_standardiste) . "' class='button'><i class='fas fa-arrow-rotate-left'></i></a>
+                </div>
+            </div>
+        </nav>";
+        
 
                 
         echo "    <div class='container mx-auto p-4'>
