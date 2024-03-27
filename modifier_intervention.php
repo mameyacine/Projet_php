@@ -17,9 +17,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
     $new_degre_urgence = $_POST["degre_urgence"];
 
     try {
+        $stmt_check_intervention = $pdo->prepare("SELECT * FROM Intervention WHERE ID_intervenant = ? AND date_heure = ? AND ID_intervention != ?");
+        $stmt_check_intervention->execute([$new_intervenant, $new_date_heure, $id_intervention]);
+        $intervention_existante = $stmt_check_intervention->fetch(PDO::FETCH_ASSOC);
+
+        if ($intervention_existante) {
+            throw new Exception("L'intervenant a déjà une intervention à cette date et heure.");
+        }
         // Préparer la requête SQL pour la mise à jour de l'intervention
         $stmt = $pdo->prepare("UPDATE Intervention SET description = ?, date_heure = ?, ID_intervenant = ?, statut = ?, degre_urgence = ? WHERE ID_intervention = ?");
-        
+
         // Exécuter la requête avec les valeurs appropriées
         $stmt->execute([$new_description, $new_date_heure, $new_intervenant, $new_statut, $new_degre_urgence, $id_intervention]);
 
@@ -28,8 +35,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
         exit();
     } catch(PDOException $e) {
         echo "Erreur lors de la modification de l'intervention : " . $e->getMessage();
+    } catch (Exception $e) {
+        echo "Erreur lors de la modification de l'intervention : " . $e->getMessage();
     }
 }
+
+
 ?>
 
 
@@ -60,21 +71,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
 
 
 <!-- Contenu de la page -->
-<div class="container mx-auto p-4 ">
+<div class="container mx-auto p-2 ">
     <?php if (!isset($_GET['id']) || !isset($_GET['idA'])): ?>
         <h1 class="text-3xl font-bold mb-4 text-center">Rechercher une intervention</h1>
 
     <!-- Formulaire de recherche -->
     <form action="" method="post" class="mb-4">
-        <div class="w-full">
             <input type="hidden" name="idA" value="<?php echo htmlspecialchars($id_admin); ?>">
-            <div class="mb-4">
                 <label class="block form text-sm font-bold " for="description">Description :</label>
-                <input type="text" name="description" class="w-5/6 px-3 py-2  border rounded-lg focus:outline-none" placeholder="Entrez la description de l'intervention">
-            </div>
+                <input type="text" name="description" class="w-5/6 px-3 py-2  border rounded-lg focus:outline-none m-2" placeholder="Entrez la description de l'intervention">
             <button type="submit" class="button rounded" name="search"><i class="fas fa-search"></i></button>
-        </div>
     </form>
+
+
     <?php endif; ?>
 
     <?php

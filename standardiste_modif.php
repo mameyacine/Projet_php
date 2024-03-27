@@ -37,6 +37,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["search"])) {
     // Assurez-vous que $id_standardiste est défini
     if (isset($id_standardiste)) {
         try {
+
+
+    
             // Requête pour récupérer les détails de l'intervention
             $stmtIntervention = $pdo->prepare('SELECT ID_intervention, description FROM Intervention WHERE description LIKE :description AND ID_standardiste = :id_standardiste');
             $stmtIntervention->execute(['description' => "%$description%", 'id_standardiste' => $id_standardiste]);
@@ -58,9 +61,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
     $new_degre_urgence = $_POST["degre_urgence"];
 
     try {
+        
+        // Vérifier si le standardiste a déjà une intervention à la même date et heure
+        $stmt_check_intervention = $pdo->prepare("SELECT * FROM Intervention WHERE ID_standardiste = ? AND date_heure = ? AND ID_intervention != ?");
+        $stmt_check_intervention->execute([$id_standardiste, $new_date_heure, $id_intervention]);
+        $intervention_existante = $stmt_check_intervention->fetch(PDO::FETCH_ASSOC);
+
+        if ($intervention_existante) {
+            throw new Exception("Le standardiste a déjà une intervention à cette date et heure.");
+        }
+
         // Préparation de la requête SQL pour la mise à jour de l'intervention
         $stmt = $pdo->prepare("UPDATE Intervention SET description = ?, date_heure = ?, statut = ?, degre_urgence = ? WHERE ID_intervention = ?");
-        
+
         // Exécution de la requête avec les valeurs appropriées
         $stmt->execute([$new_description, $new_date_heure, $new_statut, $new_degre_urgence, $id_intervention]);
 
@@ -69,8 +82,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
         exit();
     } catch(PDOException $e) {
         echo "Erreur lors de la modification de l'intervention : " . $e->getMessage();
+    } catch (Exception $e) {
+        echo "Erreur : " . $e->getMessage();
     }
 }
+
 ?>
 
 <!DOCTYPE html>

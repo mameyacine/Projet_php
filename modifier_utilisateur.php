@@ -30,10 +30,8 @@ $id_admin = isset($_GET['idA']) ? $_GET['idA'] : null;
     <!-- Formulaire de recherche -->
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?idA=<?php echo $id_admin; ?>" method="post" class="mb-4">
         <input type="hidden" name="idA" value="<?php echo htmlspecialchars($id_admin); ?>">
-        <div class="mb-4">
             <label class="block form text-sm font-bold mb-2" for="query">Recherche par nom, prénom ou nom d'utilisateur :</label>
-            <input type="text" id="query" name="query" class='w-5/6 px-3 py-2 border rounded-lg focus:outline-none' placeholder="Entrez le nom, prénom ou nom d'utilisateur">
-        </div>
+            <input type="text" id="query" name="query" class='w-5/6 px-3 py-2 border rounded-lg focus:outline-none mb-2' placeholder="Entrez le nom, prénom ou nom d'utilisateur">
         <button type="submit" class="button rounded"><i class="fas fa-search"></i></button>
     </form>
     

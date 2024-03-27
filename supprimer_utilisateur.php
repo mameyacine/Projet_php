@@ -15,10 +15,29 @@ if (isset($_POST['ID_utilisateur'])) {
 
         // Début de la transaction
         $pdo->beginTransaction();
+        // Supprimer les commentaires associés aux interventions des clients
+        $stmt_delete_commentaires= $pdo->prepare("DELETE FROM Commentaire WHERE ID_utilisateur = ?"); 
+        $stmt_delete_commentaires->execute([$id_utilisateur]);
+
+
 
         // Supprimer les interventions associées à l'utilisateur
-        $stmt_delete_interventions = $pdo->prepare("DELETE FROM Intervention WHERE ID_client IN (SELECT ID_client FROM Client WHERE ID_utilisateur = ?)");
-        $stmt_delete_interventions->execute([$id_utilisateur]);
+        $stmt_delete_interventions_clients = $pdo->prepare("DELETE FROM Intervention WHERE ID_client IN (SELECT ID_client FROM Client WHERE ID_utilisateur = ?)");
+        $stmt_delete_interventions_clients->execute([$id_utilisateur]);
+
+
+        // Supprimer les interventions associées à l'utilisateur
+
+
+        $stmt_delete_interventions_standardistes = $pdo->prepare("DELETE FROM Intervention WHERE ID_standardiste IN (SELECT ID_standardiste FROM Standardiste WHERE ID_utilisateur = ?)");
+        $stmt_delete_interventions_standardistes->execute([$id_utilisateur]);
+
+
+
+        // Supprimer les interventions associées à l'utilisateur
+        $stmt_delete_interventions_intervenants = $pdo->prepare("DELETE FROM Intervention WHERE ID_intervenant IN (SELECT ID_intervenant FROM Intervenant WHERE ID_utilisateur = ?)");
+        $stmt_delete_interventions_intervenants->execute([$id_utilisateur]);
+
 
         // Supprimer les références dans les autres tables
         $stmt_delete_client = $pdo->prepare("DELETE FROM Client WHERE ID_utilisateur = ?");

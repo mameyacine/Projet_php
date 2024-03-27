@@ -76,9 +76,11 @@ $stmt_interventions->execute([$idClient]);
 <div class="flex justify-between items-center p-2">
     <h1 class="text-3xl font-bold m-4">Mes interventions</h1>
         <div class="flex items-center"> 
-             <a href="mes_demandes.php?idC=<?php echo htmlspecialchars($idClient); ?>" class="button ">Mes demandes</a>
 
+             <a href="mes_demandes.php?idC=<?php echo htmlspecialchars($idClient); ?>" class="button ">Mes demandes</a>
             <a href="client_historique.php?idC=<?php echo htmlspecialchars($idClient); ?>" class="button"><i class="fas fa-book"></i></a>
+            <a href="client_commentaire.php?idC=<?php echo htmlspecialchars($idClient); ?>" class="button"><i class="fa-regular fa-comment"></i></a>
+
         </div>
     </div>
 <div class="container mx-auto p-2">

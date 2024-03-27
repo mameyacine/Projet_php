@@ -33,6 +33,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Récupérer l'ID du client
         $id_client = $row['ID_client'];
+        // Vérifier si le standardiste a déjà une intervention à la même date et heure
+        $stmt_check_intervention = $pdo->prepare("SELECT * FROM Intervention WHERE ID_standardiste = ? AND date_heure = ?");
+        $stmt_check_intervention->execute([$id_standardiste, $date_heure]);
+        $intervention_existante = $stmt_check_intervention->fetch(PDO::FETCH_ASSOC);
+
+        if ($intervention_existante) {
+            throw new Exception("Le standardiste a déjà une intervention à cette date et heure.");
+        }
+
 
         // Requête d'insertion de l'intervention
         $stmt_insert_intervention = $pdo->prepare("INSERT INTO Intervention (description, date_heure, degre_urgence, statut, ID_standardiste, ID_client) VALUES (?, ?, ?, ?, ?, ?)");
