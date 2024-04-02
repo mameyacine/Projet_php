@@ -27,6 +27,21 @@ if (isset($_POST['ID_utilisateur']) && isset($_POST['nouveau_role'])) {
                 $stmt_insert_client = $pdo->prepare("INSERT INTO Client (ID_utilisateur, nom_utilisateur, prenom, nom) SELECT ID_utilisateur, nom_utilisateur, prenom, nom FROM Utilisateur WHERE ID_utilisateur = ?");
                 $stmt_insert_client->execute([$id_utilisateur]);
 
+
+
+                $stmt_delete_commentaires_standardistes = $pdo->prepare("DELETE FROM Commentaire WHERE ID_utilisateur = ?");
+                $stmt_delete_commentaires_standardistes->execute([$id_utilisateur]);
+
+                $stmt_delete_interventions_standardistes = $pdo->prepare("DELETE FROM Intervention WHERE ID_standardiste = (SELECT ID_standardiste FROM Standardiste WHERE ID_utilisateur = ?)");
+                $stmt_delete_interventions_standardistes->execute([$id_utilisateur]);
+
+
+                $stmt_delete_commentaires_intervenants = $pdo->prepare("DELETE FROM Commentaire WHERE ID_utilisateur = ?");
+                $stmt_delete_commentaires_intervenants->execute([$id_utilisateur]);
+
+                $stmt_delete_interventions_intervenants = $pdo->prepare("DELETE FROM Intervention WHERE ID_intervenant = (SELECT ID_intervenant FROM Intervenant WHERE ID_utilisateur = ?)");
+                $stmt_delete_interventions_intervenants->execute([$id_utilisateur]);
+
                 // Supprimer les données de la table Intervenant associées à cet utilisateur
                 $stmt_delete_intervenant = $pdo->prepare("DELETE FROM Intervenant WHERE ID_utilisateur = ?");
                 $stmt_delete_intervenant->execute([$id_utilisateur]);
@@ -36,11 +51,28 @@ if (isset($_POST['ID_utilisateur']) && isset($_POST['nouveau_role'])) {
                 $stmt_delete_standardiste->execute([$id_utilisateur]);
                 break;
             case 'standardiste':
+                $stmt_delete_demande = $pdo->prepare("DELETE FROM Demande WHERE ID_client = (SELECT ID_client FROM Client WHERE ID_utilisateur = ?)");
+                $stmt_delete_demande->execute([$id_utilisateur]);
+
+                $stmt_delete_commentaires_clients = $pdo->prepare("DELETE FROM Commentaire WHERE ID_utilisateur = ?");
+                $stmt_delete_commentaires_clients->execute([$id_utilisateur]);
+
+                $stmt_delete_interventions_clients = $pdo->prepare("DELETE FROM Intervention WHERE ID_client = (SELECT ID_client FROM Client WHERE ID_utilisateur = ?)");
+                $stmt_delete_interventions_clients->execute([$id_utilisateur]);
+
+
+                $stmt_delete_commentaires_intervenants = $pdo->prepare("DELETE FROM Commentaire WHERE ID_utilisateur = ?");
+                $stmt_delete_commentaires_intervenants->execute([$id_utilisateur]);
+
+                $stmt_delete_interventions_intervenants = $pdo->prepare("DELETE FROM Intervention WHERE ID_intervenant = (SELECT ID_intervenant FROM Intervenant WHERE ID_utilisateur = ?)");
+                $stmt_delete_interventions_intervenants->execute([$id_utilisateur]);
+
+
                 // Insérer les données dans la table Standardiste
                 $stmt_insert_standardiste = $pdo->prepare("INSERT INTO Standardiste (ID_utilisateur, nom_utilisateur, prenom, nom) SELECT ID_utilisateur, nom_utilisateur, prenom, nom FROM Utilisateur WHERE ID_utilisateur = ?");
                 $stmt_insert_standardiste->execute([$id_utilisateur]);
 
-                // Supprimer les données de la table Client associées à cet utilisateur
+                // Supprimer les données de la table intervenant associées à cet utilisateur
                 $stmt_delete_client = $pdo->prepare("DELETE FROM Client WHERE ID_utilisateur = ?");
                 $stmt_delete_client->execute([$id_utilisateur]);
 
@@ -49,6 +81,22 @@ if (isset($_POST['ID_utilisateur']) && isset($_POST['nouveau_role'])) {
                 $stmt_delete_intervenant->execute([$id_utilisateur]);
                 break;
             case 'intervenant':
+                $stmt_delete_demande = $pdo->prepare("DELETE FROM Demande WHERE ID_client = (SELECT ID_client FROM Client WHERE ID_utilisateur = ?)");
+                $stmt_delete_demande->execute([$id_utilisateur]);
+
+
+                $stmt_delete_commentaires_clients = $pdo->prepare("DELETE FROM Commentaire WHERE ID_utilisateur = ?");
+                $stmt_delete_commentaires_clients->execute([$id_utilisateur]);
+
+                $stmt_delete_interventions_clients = $pdo->prepare("DELETE FROM Intervention WHERE ID_client = (SELECT ID_client FROM Client WHERE ID_utilisateur = ?)");
+                $stmt_delete_interventions_clients->execute([$id_utilisateur]);
+
+
+                $stmt_delete_commentaires_standardistes = $pdo->prepare("DELETE FROM Commentaire WHERE ID_utilisateur = ?");
+                $stmt_delete_commentaires_standardistes->execute([$id_utilisateur]);
+
+                $stmt_delete_interventions_standardistes = $pdo->prepare("DELETE FROM Intervention WHERE ID_standardiste = (SELECT ID_standardiste FROM Standardiste WHERE ID_utilisateur = ?)");
+                $stmt_delete_interventions_standardistes->execute([$id_utilisateur]);
                 // Insérer les données dans la table Intervenant
                 $stmt_insert_intervenant = $pdo->prepare("INSERT INTO Intervenant (ID_utilisateur, nom_utilisateur, prenom, nom) SELECT ID_utilisateur, nom_utilisateur, prenom, nom FROM Utilisateur WHERE ID_utilisateur = ?");
                 $stmt_insert_intervenant->execute([$id_utilisateur]);

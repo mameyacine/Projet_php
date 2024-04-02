@@ -37,7 +37,7 @@ if ($id_intervenant !== null) {
         $search_results = [];
         if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['search'])) {
             $search = isset($_POST['search']) ? $_POST['search'] : '';
-            $stmt_search = $pdo->prepare("SELECT ID_intervention, description FROM Intervention WHERE ID_intervenant = ? AND description LIKE ?");
+            $stmt_search = $pdo->prepare("SELECT ID_intervention, description FROM Intervention WHERE ID_intervenant = ?  AND (statut = 'en attente' OR statut = 'en cours') AND description LIKE ?");
             $stmt_search->execute([$id_intervenant, "%$search%"]);
             $search_results = $stmt_search->fetchAll(PDO::FETCH_ASSOC);
         }

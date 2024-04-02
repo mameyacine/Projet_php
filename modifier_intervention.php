@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
         $description = $_POST['description'];
 
         // Traitement de la recherche d'intervention par description
-        $stmt = $pdo->prepare("SELECT * FROM Intervention WHERE description LIKE ?");
+        $stmt = $pdo->prepare("SELECT * FROM Intervention WHERE description LIKE ? AND (statut = 'en attente' OR statut = 'en cours') ");
         $stmt->execute(["%$description%"]);
         $interventions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
             echo "<ul>";
             echo "<div class =''>";
             foreach ($interventions as $intervention) {
-                echo "<li class='p-4'>" . htmlspecialchars($intervention['description']) . "  <a class='button' href='modifier_intervention.php?id=" . htmlspecialchars($intervention['ID_intervention']) . "&idA=" . htmlspecialchars($id_admin) . "'><i class='fas fa-edit'></i> </a> <a class='delete bg-red-500 text-white 'href='supprimer_intervention.php?id=" . htmlspecialchars($intervention['ID_intervention']) . "'><i class='fas fa-trash'></i> </a></li>";
+                echo "<li class='p-4'>" . htmlspecialchars($intervention['description']) . "  <a class='button' href='modifier_intervention.php?id=" . htmlspecialchars($intervention['ID_intervention']) . "&idA=" . htmlspecialchars($id_admin) . "'><i class='fas fa-edit'></i> </a> <a class='delete bg-red-500 text-white 'href='supprimer_intervention.php?id=" . htmlspecialchars($intervention['ID_intervention']) . "&idA=" . htmlspecialchars($id_admin) .  "'><i class='fas fa-trash'></i> </a></li>";
             }
             echo "</ul>";
             echo "</div>";

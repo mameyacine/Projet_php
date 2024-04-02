@@ -31,7 +31,7 @@ try {
         if(isset($id_intervenant)) {
             try {
                 // Requête pour récupérer les détails de l'intervention à partir de la description et de l'ID du intervenant
-                $stmtIntervention = $pdo->prepare('SELECT ID_intervention, description FROM Intervention WHERE description LIKE :description AND ID_intervenant = :id_intervenant');
+                $stmtIntervention = $pdo->prepare("SELECT ID_intervention, description FROM Intervention WHERE description LIKE :description AND ID_intervenant = :id_intervenant AND (statut = 'en attente' OR statut = 'en cours') ");
                 // Associez les paramètres à la requête préparée et exécutez-la
                 $stmtIntervention->execute(['description' => "%$description%", 'id_intervenant' => $id_intervenant]);
                 $interventions = $stmtIntervention->fetchAll();

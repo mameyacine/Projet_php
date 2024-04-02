@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["search"])) {
 
     
             // Requête pour récupérer les détails de l'intervention
-            $stmtIntervention = $pdo->prepare('SELECT ID_intervention, description FROM Intervention WHERE description LIKE :description AND ID_standardiste = :id_standardiste');
+            $stmtIntervention = $pdo->prepare("SELECT ID_intervention, description FROM Intervention WHERE description LIKE :description AND ID_standardiste = :id_standardiste AND (statut = 'en attente' OR statut = 'en cours') ");
             $stmtIntervention->execute(['description' => "%$description%", 'id_standardiste' => $id_standardiste]);
             $interventions = $stmtIntervention->fetchAll();
         } catch (PDOException $e) {
@@ -87,27 +87,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] ==="POST" && isset($_POST["delete"])) {
+
+
+
+if ($_SERVER["REQUEST_METHOD"] === "POST"  && isset($_POST["delete"])) {
 
     // Récupérer l'ID de l'intervention à supprimer
-    $id_intervention = $_POST["id_intervention"];
+    $intervention_id = $_POST["id_intervention"];
+    var_dump($intervention_id);
 
-    // Connexion à la base de données
-    $pdo = new PDO("mysql:host=localhost;dbname=projet_php", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    try {
+        // Connexion à la base de données
+        $pdo = new PDO("mysql:host=localhost;dbname=projet_php", "root", "");
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        // Suppression des commentaires
+        $stmt_delete_commentaires = $pdo->prepare("DELETE FROM Commentaire WHERE ID_intervention = ?");
+        $stmt_delete_commentaires->execute([$intervention_id]);
 
-    $stmt_delete_commentaires= $pdo->prepare("DELETE FROM Commentaire WHERE ID_intervention= ?"); 
-    $stmt_delete_commentaires->execute([$id_intervention]);
+        // Suppression de l'intervention
+        $stmt = $pdo->prepare("DELETE FROM Intervention WHERE ID_intervention = ?");
+        $stmt->execute([$intervention_id]);
 
-    // Requête pour supprimer l'intervention
-    $stmt = $pdo->prepare("DELETE FROM Intervention WHERE ID_intervention = ?");
-    $stmt->execute([$id_intervention]);
-
-    // Redirection vers le tableau de toutes les interventions
-    header("Location: standardiste.php?idST=$id_standardiste");
-    exit();
+        // Redirection vers le tableau de toutes les interventions
+        header("Location: admin.php?idA=$id_admin");
+        exit();
+    } catch (PDOException $e) {
+        // Gestion des erreurs
+        echo "Erreur : " . $e->getMessage();
+    }
 }
+
 
 
 ?>

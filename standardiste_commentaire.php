@@ -30,7 +30,7 @@ try {
         if(isset($id_standardiste)) {
             try {
                 // Requête pour récupérer les détails de l'intervention à partir de la description et de l'ID du standardiste
-                $stmtIntervention = $pdo->prepare('SELECT ID_intervention, description FROM Intervention WHERE description LIKE :description AND ID_standardiste = :id_standardiste');
+                $stmtIntervention = $pdo->prepare("SELECT ID_intervention, description FROM Intervention WHERE description LIKE :description AND ID_standardiste = :id_standardiste AND (statut = 'en attente' OR statut = 'en cours')");
                 // Associez les paramètres à la requête préparée et exécutez-la
                 $stmtIntervention->execute(['description' => "%$description%", 'id_standardiste' => $id_standardiste]);
                 $interventions = $stmtIntervention->fetchAll();
