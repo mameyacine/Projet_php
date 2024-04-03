@@ -143,8 +143,11 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
         <input class="w-full px-3 py-2 border rounded-md" type="password" id="password" name="password" required>
     </div>
 
-    <div class="mb-4">
+    <div class="mb-4 flex justify-between">
         <a href="forgot_password.php" class="">Mot de passe oublié ?</a>
+        <a href="inscription.php" class="">Inscription</a>
+
+
     </div>
 
     <button class="button bg-blue-700 py-2 px-4 " type="submit">Se connecter</button>
